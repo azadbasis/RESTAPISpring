@@ -1,5 +1,6 @@
 package com.restapi.controller;
 
+import com.restapi.model.UserRest;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -9,17 +10,24 @@ public class UserController {
 
 
     @GetMapping
-    public String getUsers(
-            @RequestParam(value = "page",defaultValue = "1") int page,
-            @RequestParam(value = "limit",defaultValue = "50") int limit,
-            @RequestParam(value = "sort",defaultValue = "desc",required = false) String sort
-    ) {
-        return "get user was called with page = " + page + " and limit = " + limit+" and sort "+sort;
+    public String getUsers
+            (
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "50") int limit,
+            @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort
+            )
+    {
+        return "get user was called with page = " + page + " and limit = " + limit + " and sort " + sort;
     }
 
     @GetMapping(path = "/{userId}")
-    public String getUserById(@PathVariable String userId) {
-        return "get user was called userId= " + userId;
+    public UserRest getUserById(@PathVariable String userId) {
+        UserRest returnValue = new UserRest();
+        returnValue.setEmail("azad@gmail.com");
+        returnValue.setFirstName("Azharul");
+        returnValue.setLastName("Islam");
+
+        return returnValue;
     }
 
     @PostMapping
