@@ -8,12 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
 @RequestMapping("/users")//http://localhost:8080/users
 public class UserController {
 
+
+    private Map<String, UserRest> users;
 
     @GetMapping
     public String getUsers
@@ -31,21 +36,23 @@ public class UserController {
                             MediaType.APPLICATION_JSON_VALUE
                     })
     public ResponseEntity<UserRest> getUserById(@PathVariable String userId) {
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail("azad@gmail.com");
-        returnValue.setFirstName("Azharul");
-        returnValue.setLastName("Islam");
 
         // return new ResponseEntity<UserRest>(HttpStatus.OK);
         // return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
-        return new ResponseEntity<UserRest>(HttpStatus.BAD_REQUEST);
+
+
+        if (users.containsKey(userId)) {
+            return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @PostMapping(
             consumes =
-            {MediaType.APPLICATION_XML_VALUE,
-                    MediaType.APPLICATION_JSON_VALUE
-            },
+                    {MediaType.APPLICATION_XML_VALUE,
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
             produces =
                     {MediaType.APPLICATION_XML_VALUE,
                             MediaType.APPLICATION_JSON_VALUE
@@ -56,6 +63,11 @@ public class UserController {
         returnValue.setEmail(userDetails.getEmail());
         returnValue.setFirstName(userDetails.getFirstName());
         returnValue.setLastName(userDetails.getLastName());
+        String userId = UUID.randomUUID().toString();
+        returnValue.setUserId(userId);
+        if (users == null)
+            users = new HashMap<>();
+        users.put(userId, returnValue);
         return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
         //
     }
