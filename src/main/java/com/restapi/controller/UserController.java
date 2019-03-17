@@ -1,7 +1,10 @@
 package com.restapi.controller;
 
 import com.restapi.model.UserRest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,13 +25,15 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
-    public UserRest getUserById(@PathVariable String userId) {
+    public ResponseEntity<UserRest> getUserById(@PathVariable String userId) {
         UserRest returnValue = new UserRest();
         returnValue.setEmail("azad@gmail.com");
         returnValue.setFirstName("Azharul");
         returnValue.setLastName("Islam");
 
-        return returnValue;
+       // return new ResponseEntity<UserRest>(HttpStatus.OK);
+       // return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
+        return new ResponseEntity<UserRest>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping
