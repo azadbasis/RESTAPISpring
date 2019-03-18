@@ -1,6 +1,7 @@
 package com.restapi.controller;
 
-import com.restapi.model.UserDetailsRequestModel;
+import com.restapi.model.UpdateUserDetailsRequest;
+import com.restapi.model.UserDetailsRequest;
 import com.restapi.model.UserRest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -57,7 +58,7 @@ public class UserController {
                     {MediaType.APPLICATION_XML_VALUE,
                             MediaType.APPLICATION_JSON_VALUE
                     })
-    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
+    public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequest userDetails) {
 
         UserRest returnValue = new UserRest();
         returnValue.setEmail(userDetails.getEmail());
@@ -72,12 +73,24 @@ public class UserController {
         //
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "update user was called";
+    @PutMapping(path = "/{userId}",consumes =
+            {MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            },
+            produces =
+                    {MediaType.APPLICATION_XML_VALUE,
+                            MediaType.APPLICATION_JSON_VALUE
+                    })
+    public UserRest updateUser(@PathVariable String userId,@Valid @RequestBody UpdateUserDetailsRequest userDetails) {
+
+        UserRest storeUserDetails=users.get(userId);
+        storeUserDetails.setFirstName(userDetails.getFirstName());
+        storeUserDetails.setLastName(userDetails.getLastName());
+        users.put(userId,storeUserDetails);
+        return storeUserDetails;
     }
 
-    @DeleteMapping
+    @DeleteMapping()
     public String deleteUser() {
         return "delete user was called";
     }
