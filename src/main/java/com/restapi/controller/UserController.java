@@ -1,9 +1,12 @@
 package com.restapi.controller;
 
 import com.restapi.exceptions.UserServiceException;
+import com.restapi.impl.UserServiceImpl;
 import com.restapi.model.UpdateUserDetailsRequest;
 import com.restapi.model.UserDetailsRequest;
 import com.restapi.model.UserRest;
+import com.restapi.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,9 @@ public class UserController {
 
 
     private Map<String, UserRest> users;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping
     public String getUsers
@@ -63,15 +69,7 @@ public class UserController {
                     })
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequest userDetails) {
 
-        UserRest returnValue = new UserRest();
-        returnValue.setEmail(userDetails.getEmail());
-        returnValue.setFirstName(userDetails.getFirstName());
-        returnValue.setLastName(userDetails.getLastName());
-        String userId = UUID.randomUUID().toString();
-        returnValue.setUserId(userId);
-        if (users == null)
-            users = new HashMap<>();
-        users.put(userId, returnValue);
+        UserRest returnValue = userService.createUser(userDetails);
         return new ResponseEntity<UserRest>(returnValue, HttpStatus.OK);
         //
     }
