@@ -1,5 +1,6 @@
 package com.restapi.controller;
 
+import com.restapi.exceptions.UserServiceException;
 import com.restapi.model.UpdateUserDetailsRequest;
 import com.restapi.model.UserDetailsRequest;
 import com.restapi.model.UserRest;
@@ -40,9 +41,9 @@ public class UserController {
 
         // return new ResponseEntity<UserRest>(HttpStatus.OK);
         // return new ResponseEntity<UserRest>(returnValue,HttpStatus.OK);
-
-        String firstName=null;
-        int firstNameLength=firstName.length();
+        if (true) throw new UserServiceException("A user service exception is thrown");
+      /*  String firstName=null;
+        int firstNameLength=firstName.length();*/
 
         if (users.containsKey(userId)) {
             return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
@@ -75,7 +76,7 @@ public class UserController {
         //
     }
 
-    @PutMapping(path = "/{userId}",consumes =
+    @PutMapping(path = "/{userId}", consumes =
             {MediaType.APPLICATION_XML_VALUE,
                     MediaType.APPLICATION_JSON_VALUE
             },
@@ -83,12 +84,12 @@ public class UserController {
                     {MediaType.APPLICATION_XML_VALUE,
                             MediaType.APPLICATION_JSON_VALUE
                     })
-    public UserRest updateUser(@PathVariable String userId,@Valid @RequestBody UpdateUserDetailsRequest userDetails) {
+    public UserRest updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserDetailsRequest userDetails) {
 
-        UserRest storeUserDetails=users.get(userId);
+        UserRest storeUserDetails = users.get(userId);
         storeUserDetails.setFirstName(userDetails.getFirstName());
         storeUserDetails.setLastName(userDetails.getLastName());
-        users.put(userId,storeUserDetails);
+        users.put(userId, storeUserDetails);
         return storeUserDetails;
     }
 
